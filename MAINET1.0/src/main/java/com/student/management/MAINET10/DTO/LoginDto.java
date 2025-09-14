@@ -1,6 +1,5 @@
 package com.student.management.MAINET10.DTO;
 
-import jakarta.persistence.Column;
 import lombok.Data;
 
 @Data
@@ -14,6 +13,7 @@ public class LoginDto {
 	private Double otp;
 	private String Authenticated;
 	private String Ip_address;
+	private Long organization;
 
 
 }
