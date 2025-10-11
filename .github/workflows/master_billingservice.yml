@@ -23,17 +23,17 @@ jobs:
 
       # Set DB credentials as environment variables
       - name: Set environment variables
-        run: echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
-      - run: echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+        run: |
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
 
       # Optional: Test database connectivity
       - name: Test PostgreSQL connection
         run: |
           echo "Testing Supabase connection..."
-          psql "host=db.svykaxrcdwjppsswglru.supabase.co port=5432 dbname=postgres user=$DB_USERNAME password=$DB_PASSWORD sslmode=require" -c '\l'
-        env:
-          PGPASSWORD: ${{ secrets.DB_PASSWORD }}
+          PGPASSWORD=$DB_PASSWORD psql "host=aws-1-us-east-2.pooler.supabase.com port=5432 dbname=postgres user=$DB_USERNAME" -c '\l'
 
+      # Build Maven project with prod profile
       - name: Build with Maven
         run: mvn clean install -Dspring.profiles.active=prod
         working-directory: ./MAINET1.0
@@ -74,3 +74,4 @@ jobs:
           app-name: 'BillingService'
           slot-name: 'Production'
           package: '*.jar'
+
