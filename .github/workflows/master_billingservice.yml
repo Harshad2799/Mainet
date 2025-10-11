@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy JAR app to Azure Web App - BillingService
 
 on:
@@ -13,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
@@ -24,22 +21,38 @@ jobs:
           java-version: '17'
           distribution: 'microsoft'
 
+      # Set DB credentials as environment variables
+      - name: Set environment variables
+        run: echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
+      - run: echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+
+      # Optional: Test database connectivity
+      - name: Test PostgreSQL connection
+        run: |
+          echo "Testing Supabase connection..."
+          psql "host=db.svykaxrcdwjppsswglru.supabase.co port=5432 dbname=postgres user=$DB_USERNAME password=$DB_PASSWORD sslmode=require" -c '\l'
+        env:
+          PGPASSWORD: ${{ secrets.DB_PASSWORD }}
+
       - name: Build with Maven
         run: mvn clean install -Dspring.profiles.active=prod
         working-directory: ./MAINET1.0
+        env:
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: '${{ github.workspace }}/target/*.jar'
+          path: '${{ github.workspace }}/MAINET1.0/target/*.jar'
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+      id-token: write
+      contents: read
   
     steps:
       - name: Download artifact from build job
@@ -61,6 +74,3 @@ jobs:
           app-name: 'BillingService'
           slot-name: 'Production'
           package: '*.jar'
-
-          
-
