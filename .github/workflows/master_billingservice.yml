@@ -21,17 +21,16 @@ jobs:
           java-version: '17'
           distribution: 'microsoft'
 
-      # Test PostgreSQL connections
       - name: Test PostgreSQL connections
         run: |
           echo "Testing URL 1..."
-          PGPASSWORD=addKtgc7HFens1q5 psql "postgresql://postgres@db.svykaxrcdwjppsswglru.supabase.co:5432/postgres" -c '\conninfo' || echo "URL 1 failed"
+          PGPASSWORD=addKtgc7HFens1q5 psql -h db.svykaxrcdwjppsswglru.supabase.co -p 5432 -U postgres -d postgres -c '\conninfo' || echo "URL 1 failed"
 
           echo "Testing URL 2..."
-          PGPASSWORD=addKtgc7HFens1q5 psql "postgresql://postgres.svykaxrcdwjppsswglru@aws-1-us-east-2.pooler.supabase.com:6543/postgres" -c '\conninfo' || echo "URL 2 failed"
+          PGPASSWORD=addKtgc7HFens1q5 psql -h aws-1-us-east-2.pooler.supabase.com -p 6543 -U postgres.svykaxrcdwjppsswglru -d postgres -c '\conninfo' || echo "URL 2 failed"
 
           echo "Testing URL 3..."
-          PGPASSWORD=addKtgc7HFens1q5 psql "postgresql://postgres.svykaxrcdwjppsswglru@aws-1-us-east-2.pooler.supabase.com:5432/postgres" -c '\conninfo' || echo "URL 3 failed"
+          PGPASSWORD=addKtgc7HFens1q5 psql -h aws-1-us-east-2.pooler.supabase.com -p 5432 -U postgres.svykaxrcdwjppsswglru -d postgres -c '\conninfo' || echo "URL 3 failed"
         shell: bash
 
       # Build Maven project with prod profile
