@@ -21,20 +21,11 @@ jobs:
           java-version: '17'
           distribution: 'microsoft'
 
-      # Set DB credentials as environment variables
-      - name: Set environment variables
-        run: |
-          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
-
      
       # Build Maven project with prod profile
       - name: Build with Maven
         run: mvn clean install -Dspring.profiles.active=prod
         working-directory: ./MAINET1.0
-        env:
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -69,5 +60,6 @@ jobs:
           app-name: 'BillingService'
           slot-name: 'Production'
           package: '*.jar'
+
 
 
