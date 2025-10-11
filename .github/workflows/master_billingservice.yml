@@ -31,7 +31,7 @@ jobs:
       - name: Test PostgreSQL connection
         run: |
           echo "Testing Supabase connection..."
-          PGPASSWORD=$DB_PASSWORD psql "host=aws-1-us-east-2.pooler.supabase.com port=5432 dbname=postgres user=$DB_USERNAME sslmode=require" -c '\l'
+          PGPASSWORD=$DB_PASSWORD psql "host=aws-1-us-east-2.pooler.supabase.com port=5432 dbname=postgres user=$DB_USERNAME" -c '\l'
 
       # Build Maven project with prod profile
       - name: Build with Maven
@@ -74,3 +74,4 @@ jobs:
           app-name: 'BillingService'
           slot-name: 'Production'
           package: '*.jar'
+
