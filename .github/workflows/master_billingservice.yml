@@ -61,6 +61,5 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'modernsoutions'
-          resource-group-name: 'ApplicationServer'   # corrected input
-          package: './java-app/MAINET1.0-0.0.1-SNAPSHOT.jar'  # exact path after artifact download
-          # slot-name removed for default production slot
+          resource-group-name: 'ApplicationServer'
+          package: './java-app/*.jar'
