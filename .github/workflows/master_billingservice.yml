@@ -28,7 +28,7 @@ jobs:
           PGPASSWORD=a8d.JFvMvBQfcB{b psql -h 34.16.21.44 -p 5432 -U postgres -d BillingService -c '\conninfo'
         shell: bash
 
-      - name: Build with Maven
+      - name: Build Maven project
         run: mvn clean install -Dspring.profiles.active=prod
         working-directory: ./MAINET1.0
 
@@ -36,7 +36,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: './MAINET1.0/target/*.jar'
+          path: './MAINET1.0/target/MAINET1.0-0.0.1-SNAPSHOT.jar'
 
   deploy:
     runs-on: ubuntu-latest
@@ -50,7 +50,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: java-app
-          path: ./java-app  # download to this folder
+          path: ./java-app
 
       - name: Azure Login via Service Principal
         uses: azure/login@v2
@@ -64,5 +64,4 @@ jobs:
         with:
           app-name: 'modernsoutions'
           resource-group-name: 'ApplicationServer'
-          package: './java-app/*.jar' # picks up JAR downloaded from artifact
-          # slot-name omitted because Free-tier Linux does not support deployment slots
+          package: './java-app/MAINET1.0-0.0.1-SNAPSHOT.jar'
