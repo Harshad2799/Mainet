@@ -13,9 +13,10 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Set up Java version
+      - name: Set up Java 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
@@ -27,7 +28,7 @@ jobs:
           PGPASSWORD=a8d.JFvMvBQfcB{b psql -h 34.16.21.44 -p 5432 -U postgres -d BillingService -c '\conninfo'
         shell: bash
 
-      - name: Build with Maven
+      - name: Build Maven project with prod profile
         run: mvn clean install -Dspring.profiles.active=prod
         working-directory: ./MAINET1.0
 
@@ -52,6 +53,6 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'modernsoutions'        # your Azure Web App name
-          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}  # use publish profile secret
-          package: './java-app/MAINET1.0-0.0.1-SNAPSHOT.jar'    # path to built JAR
+          app-name: 'modernsoutions'                       # your Azure Web App name
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}  # your publish profile secret
+          package: './MAINET1.0/target/MAINET1.0-0.0.1-SNAPSHOT.jar'  # correct path to JAR
