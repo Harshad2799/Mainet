@@ -41,6 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     permissions:
+      id-token: write # Required for Azure login
       contents: read
 
     steps:
@@ -49,10 +50,17 @@ jobs:
         with:
           name: java-app
 
+      - name: Azure Login via Service Principal
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'modernsoutions'
-          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+          resource-group: 'ApplicationServer'
           package: './MAINET1.0/target/*.jar'
-          # slot-name removed because Free-tier Linux Web Apps do not support deployment slots
+          # slot-name omitted for default production slot
