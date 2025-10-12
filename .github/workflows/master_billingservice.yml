@@ -13,26 +13,25 @@ jobs:
       contents: read
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Java 17
+      - name: Set up Java version
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'microsoft'
 
-      - name: Test PostgreSQL connections
+      - name: Test Google Cloud SQL connection
         run: |
           echo "Testing Google Cloud DB"
           PGPASSWORD=a8d.JFvMvBQfcB{b psql -h 34.16.21.44 -p 5432 -U postgres -d BillingService -c '\conninfo'
         shell: bash
 
-      - name: Build Maven project with prod profile
+      - name: Build Maven project
         run: mvn clean install -Dspring.profiles.active=prod
         working-directory: ./MAINET1.0
 
-      - name: Upload artifact for deployment job
+      - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
         with:
           name: java-app
@@ -50,9 +49,9 @@ jobs:
         with:
           name: java-app
 
-      - name: Deploy to Azure Web App
+      - name: Deploy to Azure Web App using publish profile
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'modernsoutions'                       # your Azure Web App name
-          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}  # your publish profile secret
-          package: './MAINET1.0/target/MAINET1.0-0.0.1-SNAPSHOT.jar'  # correct path to JAR
+          app-name: 'modernsoutions'
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+          package: './MAINET1.0/target/MAINET1.0-0.0.1-SNAPSHOT.jar'
