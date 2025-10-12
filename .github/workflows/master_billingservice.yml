@@ -13,9 +13,10 @@ jobs:
       contents: read # Required for actions/checkout
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Set up Java version
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
           java-version: '17'
@@ -31,7 +32,7 @@ jobs:
         run: mvn clean install -Dspring.profiles.active=prod
         working-directory: ./MAINET1.0
 
-      - name: Upload artifact for deployment job
+      - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
         with:
           name: java-app
@@ -45,10 +46,11 @@ jobs:
       contents: read
 
     steps:
-      - name: Download artifact from build job
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: java-app
+          path: ./java-app  # download to this folder
 
       - name: Azure Login via Service Principal
         uses: azure/login@v2
@@ -62,4 +64,5 @@ jobs:
         with:
           app-name: 'modernsoutions'
           resource-group-name: 'ApplicationServer'
-          package: './java-app/*.jar'
+          package: './java-app/*.jar' # picks up JAR downloaded from artifact
+          # slot-name omitted because Free-tier Linux does not support deployment slots
