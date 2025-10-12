@@ -21,7 +21,21 @@ jobs:
           java-version: '17'
           distribution: 'microsoft'
 
-     
+      - name: Test PostgreSQL connections
+        run: |
+          echo "Testing URL 1..."
+          PGPASSWORD=addKtgc7HFens1q5 psql -h db.svykaxrcdwjppsswglru.supabase.co -p 5432 -U postgres -d postgres -c '\conninfo' || echo "URL 1 failed"
+
+          echo "Testing URL 2..."
+          PGPASSWORD=addKtgc7HFens1q5 psql -h aws-1-us-east-2.pooler.supabase.com -p 6543 -U postgres.svykaxrcdwjppsswglru -d postgres -c '\conninfo' || echo "URL 2 failed"
+
+          echo "Testing URL 3..."
+          PGPASSWORD=addKtgc7HFens1q5 psql -h aws-1-us-east-2.pooler.supabase.com -p 5432 -U postgres.svykaxrcdwjppsswglru -d postgres -c '\conninfo' || echo "URL 3 failed"
+
+          echo "Testing google cloud DB"
+          PGPASSWORD=a8d.JFvMvBQfcB{b psql -h 34.16.21.44 -p 5432 -U postgres -d BillingService -c '\conninfo'
+        shell: bash
+
       # Build Maven project with prod profile
       - name: Build with Maven
         run: mvn clean install -Dspring.profiles.active=prod
@@ -60,6 +74,4 @@ jobs:
           app-name: 'BillingService'
           slot-name: 'Production'
           package: '*.jar'
-
-
 
