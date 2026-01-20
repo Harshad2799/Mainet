@@ -36,10 +36,10 @@ public class loginController {
 
 	// Login API
 	@PostMapping("/login")
-	public ResponseEntity<?> login(HttpServletRequest req,  @RequestBody LoginDto logindto) {
+	public ResponseEntity<?> login(HttpServletRequest req, @RequestBody LoginDto logindto) {
 		Employee emp = loginRepository.findByUserName(logindto.getUserName());
 
-		if (logindto.getUserName().equals("Admin") && logindto.getPassword().equals("Pass@123")) {
+		if (logindto.getUserName().equals(emp.getUserName()) && logindto.getPassword().equals(emp.getPassword())) {
 			LoginResponse login = new LoginResponse();
 			login.setToken(jwtUtil.generateJWTToken(logindto.getUserName()));
 			login.setUsername(logindto.getUserName());

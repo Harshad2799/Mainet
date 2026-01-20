@@ -9,10 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/Home.html")
 public class IndexController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	 @RequestMapping("/")
-	    String index(){
-		
-	    return "index";
-	    }
+
+	@RequestMapping("/")
+	String index() {
+		logger.info("Starting method index");
+		return "index";
+	}
 
 }
