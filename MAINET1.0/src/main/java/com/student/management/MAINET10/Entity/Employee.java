@@ -45,9 +45,11 @@ public class Employee {
 	@NotNull
 	@Column(name = "OTP")
 	private Double otp;
+
 	@NotNull
 	@Column(name = "AUTHENTICATION")
 	private String authenticated;
+
 	@NotNull
 	@Column(name = "IP_ADDRESS")
 	private String ipAddress;
