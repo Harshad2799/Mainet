@@ -11,9 +11,10 @@ public class LoginDto {
 	private String userName;
 	private String password;
 	private Double otp;
-	private String Authenticated;
-	private String Ip_address;
+	private String authenticated;
+	private String ipAddress;
 	private Long organization;
-
+	private String resMsg;
+	private String status;
 
 }

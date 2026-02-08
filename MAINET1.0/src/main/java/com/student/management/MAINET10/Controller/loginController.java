@@ -5,6 +5,7 @@ import com.student.management.MAINET10.DTO.LoginDto;
 import com.student.management.MAINET10.DTO.LoginResponse;
 import com.student.management.MAINET10.Entity.Employee;
 import com.student.management.MAINET10.Repository.LoginRepository;
+import com.student.management.MAINET10.Service.IloginService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class loginController {
 
 	@Autowired
+	private IloginService loginService;
+
+	@Autowired
 	private LoginRepository loginRepository;
 
 	private final JWTUtil jwtUtil;
@@ -29,9 +33,13 @@ public class loginController {
 
 	// Register API
 	@PostMapping("/register")
-	public ResponseEntity<Employee> register(@RequestBody Employee empData) {
-		Employee savedEmp = loginRepository.save(empData);
-		return ResponseEntity.ok(savedEmp);
+	public ResponseEntity<LoginDto> register(@RequestBody Employee empData) {
+		LoginDto response = loginService.register(empData);
+		if (response.getStatus().equals("success")) {
+			return ResponseEntity.ok(response);
+		} else {
+			return ResponseEntity.status(401).body(response);
+		}
 	}
 
 	// Login API
