@@ -1,0 +1,46 @@
+{
+    "tenantId": "in",
+    "moduleName": "TaxMaster",
+    "version": "1.0",
+    "masters": {
+        "gstRates": [
+            {
+                "code": "GST_18",
+                "rate": 18,
+                "cgst": 9,
+                "sgst": 9,
+                "igst": 18,
+                "cess": 0,
+                "effectiveFrom": "2024-01-01",
+                "effectiveTo": null,
+                "isActive": true
+            }
+        ],
+        "taxTypes": [
+            {
+                "code": "CGST",
+                "description": "Central GST",
+                "isActive": true
+            },
+            {
+                "code": "SGST",
+                "description": "State GST",
+                "isActive": true
+            },
+            {
+                "code": "IGST",
+                "description": "Integrated GST",
+                "isActive": true
+            }
+        ],
+        "hsnSacCodes": [
+            {
+                "code": "998313",
+                "type": "SERVICE",
+                "description": "IT Consulting Services",
+                "defaultGstRate": 18,
+                "isActive": true
+            }
+        ]
+    }
+}

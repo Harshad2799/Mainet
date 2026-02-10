@@ -1,15 +1,11 @@
 package com.student.management.MAINET10.Service;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.Base64;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.student.management.MAINET10.CommonUtil.JWTUtil;
 import com.student.management.MAINET10.DTO.LoginDto;
 import com.student.management.MAINET10.Entity.Employee;
 import com.student.management.MAINET10.Repository.LoginRepository;
@@ -23,6 +19,9 @@ public class loginService implements IloginService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	@Autowired
+	private JWTUtil jwtUtil;
+
 	@Override
 	public LoginDto register(Employee empData) {
 		Employee savedEmp = null;
@@ -34,6 +33,7 @@ public class loginService implements IloginService {
 			BeanUtils.copyProperties(savedEmp, resDto);
 			resDto.setStatus("success");
 			resDto.setResMsg("User registered successfully");
+			resDto.setTocken(jwtUtil.generateJWTToken(savedEmp.getUserName()));
 			return resDto;
 		} catch (Exception e) {
 			resDto.setStatus("failure");

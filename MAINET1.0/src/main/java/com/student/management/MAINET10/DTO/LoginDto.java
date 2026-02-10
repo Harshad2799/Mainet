@@ -16,5 +16,6 @@ public class LoginDto {
 	private Long organization;
 	private String resMsg;
 	private String status;
+	private String tocken;
 
 }
