@@ -14,9 +14,14 @@ import jakarta.annotation.PostConstruct;
 public class MdmsDataLoader {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final MdmsCache mdmsCache;
+
+    public MdmsDataLoader(MdmsCache mdmsCache) {
+        this.mdmsCache = mdmsCache;
+    }
 
     @PostConstruct
-    public void inti() {
+    public void init() {
         try {
             loadMdms("TaxMaster", "mdms/tax-master.json");
         } catch (Exception ex) {
@@ -28,8 +33,7 @@ public class MdmsDataLoader {
         ClassPathResource resource = new ClassPathResource(filePath);
         try (InputStream is = resource.getInputStream()) {
             Object jsonData = objectMapper.readValue(is, Object.class);
-            MdmsCache.put(moduleName, jsonData);
+            mdmsCache.put(moduleName, jsonData);
         }
-
     }
 }

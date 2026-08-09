@@ -17,6 +17,7 @@ public class JWTUtil {
         return Jwts.builder()
                 .setSubject(userName)
                 .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
                 .signWith(key)
                 .compact();
     }
